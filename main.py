@@ -2,8 +2,16 @@ from tkinter import Tk, Label, Entry, Button, filedialog, messagebox
 
 print("Iniciando...")
 
+# variavel global para armazenar o caminho do arquivo
+caminho_arquivo = ""
+
 def carregar_arquivo():
-    print("carregar arquivo...")
+    global caminho_arquivo
+    caminho_arquivo = filedialog.askopenfilename(
+        title="Selecione arquivo:",
+        filetypes=[("Arquivos de texto", "*.txt")]
+    )
+    print("arquivo carregado:", caminho_arquivo)
 
 def buscar_texto():
     print("buscar texto...")
