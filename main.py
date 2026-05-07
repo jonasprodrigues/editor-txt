@@ -11,13 +11,24 @@ def log(mensagem):
 
 def carregar_arquivo():
     global caminho_arquivo
+
     caminho_arquivo = filedialog.askopenfilename(
         title="Selecione arquivo:",
         filetypes=[("Arquivos de texto", "*.txt")]
     )
-    #label2.config(text=f"✅ Arquivo carregado: {caminho_arquivo}", fg="green")
-    #print("arquivo carregado:", caminho_arquivo)
+    
+    if not caminho_arquivo:
+        log("❌ Nenhum arquivo selecionado...")
+        return  
+
     log(f"✅ Arquivo carregado: {caminho_arquivo}")
+
+    with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
+        conteudo = arquivo.read()
+
+    quantidade = conteudo.lower().count("questao")
+
+    log(f"✅ O arquivo contém {quantidade} ocorrências da palavra 'questao'.")
 
 def buscar_texto():
     if not caminho_arquivo:
