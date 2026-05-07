@@ -1,9 +1,16 @@
 from tkinter import Tk, Label, Entry, Button, filedialog, messagebox, Frame, Text, END
+import unicodedata
 
 print("Iniciando...")
 
 # variavel global para armazenar o caminho do arquivo
 caminho_arquivo = ""
+
+def remover_acentos(texto):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', texto)
+        if unicodedata.category(c) != 'Mn'
+    )
 
 def log(mensagem):
     caixa_texto.insert(END, mensagem + "\n")
@@ -26,7 +33,9 @@ def carregar_arquivo():
     with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
         conteudo = arquivo.read()
 
-    quantidade = conteudo.lower().count("questao")
+    conteudo_sem_acentos = remover_acentos(conteudo)
+
+    quantidade = conteudo_sem_acentos.lower().count("questao")
 
     log(f"✅ O arquivo contém {quantidade} ocorrências da palavra 'questao'.")
 
@@ -36,12 +45,16 @@ def buscar_texto():
         log("❌ Nenhum arquivo carregado...")
         return
     
-    texto_busca = entrada.get()
+    texto_busca = entrada.get().strip()
+
+    texto_busca_sem_acentos = remover_acentos(texto_busca.lower())
 
     with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
         conteudo = arquivo.read()
 
-    if texto_busca in conteudo:
+    conteudo_sem_acentos = remover_acentos(conteudo)
+
+    if texto_busca_sem_acentos in conteudo_sem_acentos:
         #label2.config(text=f"✅ O texto '{texto_busca}' foi encontrado no arquivo!", fg="green")
         log(f"✅ O texto '{texto_busca}' foi encontrado no arquivo!")
     else:
